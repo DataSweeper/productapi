@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+   "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+   "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+    
+    <package name="com.shelfcare.myapp" extends="struts-default">
+        <interceptors>
+            <interceptor name="loginInterceptor" class="com.shelfcare.myapp.interceptor.LoginInterceptor"></interceptor>
+            <interceptor-stack name="loginstack">
+                <interceptor-ref name="loginInterceptor"></interceptor-ref>
+                <interceptor-ref name="defaultStack"></interceptor-ref>
+            </interceptor-stack>
+        </interceptors>
+        
+        <action name="search" class="com.shelfcare.myapp.action.Search" method="execute">
+            <result name="success">/jsp/search_result.jsp</result>
+        </action>
+        
+		<action name="login" class="com.shelfcare.myapp.action.Login" method="execute">
+    		<result name="success">/jsp/login.jsp</result>
+		</action>
+		<action name="loginaction" class="com.shelfcare.myapp.action.LoginAction" method="execute">
+    		<result name="success" type="redirectAction">
+    		    <param name="actionName">home</param>
+    		</result>
+		    <result name="input">/jsp/login.jsp</result>
+		    <result name="error">/jsp/error.jsp</result>
+		</action>
+		
+		<action name="signup" class="com.shelfcare.myapp.action.Signup" method="execute">
+    		<result name="success">/jsp/signup.jsp</result>
+		</action>
+
+		<action name="signupaction" class="com.shelfcare.myapp.action.SignupAction" method="execute">
+    		<result name="success" type="redirectAction">
+    		    <param name="actionName">home</param>
+    		</result>
+    		<result name="input">/jsp/signup.jsp</result>
+    		<result name="error">/jsp/error.jsp</result>
+		</action>
+		
+		<action name="logout" class="com.shelfcare.myapp.action.LoginAction" method="logout">
+		    <result name="success">index.jsp</result>
+		</action>
+		
+		<action name="home" class="com.shelfcare.myapp.action.Home" method="execute">
+		    <interceptor-ref name="loginstack"></interceptor-ref>
+		    <result name="success">/jsp/home.jsp</result>
+		    <result name="login" type="redirectAction">login</result>
+		</action>
+		
+	 </package>
+	    
+</struts>
