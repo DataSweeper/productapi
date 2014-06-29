@@ -15,9 +15,22 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
+
+
+
+
+
+
+
 
 
 //import model for SearchBean datatype
@@ -35,7 +48,6 @@ public class Search extends ActionSupport {
 		ValueStack stack = ActionContext.getContext().getValueStack();
 	      Map<String, Object> context = new HashMap<String, Object>();
 	      context.put("key1", GetItemInfo());
-	      context.put("url", Geturl());
 	      stack.push(context);
 		return SUCCESS;
 	}
@@ -56,17 +68,21 @@ public class Search extends ActionSupport {
 	private String[][][] GetItemInfo() {
 		String[][][] Iteminfo = new String[10][3][3];
 		try {
-	        File fXmlFile = new File("/home/likewise-open/ZOHOCORP/siva-2356/Documents/harrypotter.xml");
+			
+			Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("192.168.5.100", 80));
+			HttpURLConnection connection =(HttpURLConnection)new URL(Geturl()).openConnection(proxy);
+			connection.setDoOutput(true);
+			connection.setDoInput(true);
+			connection.setRequestProperty("Content-type", "text/xml");
+			connection.setRequestProperty("Accept", "text/xml, application/xml");
+			connection.setRequestMethod("GET");
 	        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 	        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-	        Document doc = dBuilder.parse(fXmlFile);
+	        Document doc = dBuilder.parse(connection.getInputStream());
 	 
 	        //optional, but recommended
 	        //read this - http://stackoverflow.com/questions/13786607/normalization-in-dom-parsing-with-java-how-does-it-work
 	        doc.getDocumentElement().normalize();
-	 
-//	      System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
-	 
 	        NodeList nList = doc.getElementsByTagName("Item");
 	        //System.out.println(nList.getLength());
 	 
@@ -82,7 +98,7 @@ public class Search extends ActionSupport {
 	                        Iteminfo[temp][0][2] = eElement.getElementsByTagName("Title").item(0).getTextContent();
 	 
 	                }   
-	        }   
+	        }    
 
 	}catch (Exception e) {
         e.printStackTrace();

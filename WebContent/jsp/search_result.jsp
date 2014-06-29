@@ -9,19 +9,12 @@
 <title>Insert title here</title>
 </head>
 <body>
-<H1>result page</H1>
-<s:property value="searchBean.type" />
-<s:property value="searchBean.pageno" />
-<s:property value="searchBean.text" />
-<s:property value="searchBean.name" />
 
 <s:iterator value="key1" var="arr">
       <s:property value="#arr[0][0]"/>
       <img src='<s:property value="#arr[0][1]"/>'>
       <s:property value="#arr[0][2]"/> <BR />
 </s:iterator>
-    
-<s:property value="url" />
 
 </body>
 </html>
