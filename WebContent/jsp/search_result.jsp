@@ -10,11 +10,18 @@
 </head>
 <body>
 
+<s:iterator value="key2" var="arr">
+      ${arr[0]}
+      ${arr[1]}
+      ${arr[2]}
+</s:iterator>
+
 <s:iterator value="key1" var="arr">
       <s:property value="#arr[0][0]"/>
       <img src='<s:property value="#arr[0][1]"/>'>
       <s:property value="#arr[0][2]"/> <BR />
 </s:iterator>
 
+<s:property value="key3"/>
 </body>
 </html>

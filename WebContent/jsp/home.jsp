@@ -9,7 +9,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-<H1>home.jsp</H1>
+<%@include file="/jsp/header_search.jsp" %>
 
 <s:property value="loginBean.email" />
 <s:property value="loginBean.password" />

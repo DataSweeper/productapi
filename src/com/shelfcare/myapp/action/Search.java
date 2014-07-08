@@ -33,6 +33,8 @@ import java.net.URLConnection;
 
 
 
+
+import com.shelfcare.Flipkart.FetchContent;
 //import model for SearchBean datatype
 import com.shelfcare.myapp.model.SearchBean;
 import com.amazon.advertising.api.sample.ItemSearch;
@@ -48,9 +50,11 @@ public class Search extends ActionSupport {
 		ValueStack stack = ActionContext.getContext().getValueStack();
 	      Map<String, Object> context = new HashMap<String, Object>();
 	      context.put("key1", GetItemInfo());
+	      context.put("key2", FetchContent.item(ItemSearch.getItems(searchBean.getText()))); //FetchContent.item("samsung led tv")
+	      context.put("key3", Geturl());
 	      stack.push(context);
 		return SUCCESS;
-	}
+	} 
 	
 	public SearchBean getSearchBean() {
 		return searchBean;
@@ -59,11 +63,14 @@ public class Search extends ActionSupport {
 		this.searchBean = searchBean;
 	}
 	
+
 	private String Geturl() {
 		String url = null;
 		url = ItemSearch.getItems(searchBean.getType(), searchBean.getText(), searchBean.getPageno());
 		return url;
 	}
+	
+	
 	
 	private String[][][] GetItemInfo() {
 		String[][][] Iteminfo = new String[10][3][3];

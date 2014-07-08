@@ -28,6 +28,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 
 /*
  * This class shows how to make a simple authenticated ItemLookup call to the
@@ -47,7 +49,7 @@ public class ItemSearch {
      * Your Account page.
      */
     private static final String AWS_SECRET_KEY = "2Zb6/12vDFWvn869HfmsraBlG/guLdzDC3iUsKL+";
-
+    
     /*
      * Use one of the following end-points, according to the region you are
      * interested in:
@@ -60,7 +62,7 @@ public class ItemSearch {
      *      JP: ecs.amazonaws.jp
      * 
      */
-    private static final String ENDPOINT = "ecs.amazonaws.com";
+    private static final String ENDPOINT = "webservices.amazon.in";
 
     /*
      * The Item ID to lookup. The value below was selected for the US locale.
@@ -83,10 +85,11 @@ public class ItemSearch {
          
         Map<String, String> params = new HashMap<String, String>();
         params.put("Service", "AWSECommerceService");
-        params.put("Version", "2009-03-31");
+        params.put("Version", "2011-08-01");
         params.put("Operation", "ItemSearch");
         params.put("ResponseGroup", "Medium");
         params.put("Keywords", search_string);
+        params.put("Condition", "All");
         params.put("SearchIndex", type);
         params.put("ItemPage",item_page);
         params.put("AssociateTag", "myshef-20");
@@ -96,7 +99,10 @@ public class ItemSearch {
 
     }
     
-
+    public static String getItems(String search_string) {
+    	return("http://www.flipkart.com/search?q=" + search_string.replaceAll("(\\s+)", "+") + "&as=off&as-show=on&otracker=start");
+    }
+    
     /*
      * Utility function to fetch the response from the service and extract the
      * title from the XML.
