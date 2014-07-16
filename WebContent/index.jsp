@@ -13,7 +13,5 @@
 <a href="login">Login</a>
 <a href="signup">Signup</a>
 
-<iframe src='http://www.flipkart.com/affiliate/displayWidget?affrid=WRID-140428439066257126' height=55 width=660 scrolling='no' frameborder=0></iframe>
-<IMG alt="abj" src="http://img5a.flixcart.com/image/book/4/6/6/wings-of-fire-an-autobiography-200x200-imadaryu565scaj5.jpeg" />
 </body>
 </html>

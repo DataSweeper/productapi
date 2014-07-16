@@ -11,6 +11,7 @@ import com.shelfcare.myapp.model.LoginBean;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.util.ValueStack;
+import org.apache.log4j.Logger;
 
 import org.apache.struts2.interceptor.SessionAware;
 
@@ -18,6 +19,7 @@ public class LoginAction extends ActionSupport implements SessionAware{
 	private LoginBean loginBean;
 	private String errormessage = null; 
 	private Map<String, Object> sessionMap;
+	private static final Logger logger = Logger.getLogger(LoginAction.class);
 	
 	@Override
 	public String execute() {
@@ -96,14 +98,17 @@ public class LoginAction extends ActionSupport implements SessionAware{
 			Class.forName("org.postgresql.Driver");
 			Connection con=DriverManager.getConnection("jdbc:postgresql://localhost:5432/" + dbname,"psql", "siva@123"); 
 			Statement stmt = con.createStatement();
+			logger.info("Database connected.");
 			ResultSet rs = stmt.executeQuery("SELECT * FROM ProfileInfo");
 			while(rs.next()) {
 			passwd = rs.getString("password");
 			}
+			logger.info("User password : " + passwd);
 			rs.close();
 			stmt.close();
 			con.close();
 		}catch (Exception e) {
+			logger.info("This is Error message", new Exception("Testing"));
 			e.printStackTrace();
 		}
 		return passwd;
@@ -122,6 +127,7 @@ public class LoginAction extends ActionSupport implements SessionAware{
 	@Override
 	public void setSession(Map<String, Object> sessionObj) {
 		this.sessionMap = sessionObj;
+		logger.info("Session has been set.");
 	}
 	
 	public String logout() {
