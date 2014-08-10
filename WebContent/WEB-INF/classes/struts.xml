@@ -51,6 +51,13 @@
 		    <result name="login" type="redirectAction">login</result>
 		</action>
 		
+	 <action name="emailer" 
+         class="com.shelfcare.mail.Emailer"
+         method="execute">
+         <result name="success">/jsp/search_result.jsp</result>
+         <result name="error">/jsp/error.jsp</result>
+      </action>
+		
 	 </package>
 	    
 </struts>

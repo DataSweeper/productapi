@@ -14,3 +14,5 @@
       <tr><td> <s:property value="#arr[2]"/> <BR /> </td></tr>
 </s:iterator>
 </table>
+
+ Your email to <s:property value="to"/> was sent successfully.

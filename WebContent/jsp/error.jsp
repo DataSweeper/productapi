@@ -10,5 +10,8 @@
 </head>
 <body>
 <h1><s:property value="errormsg"/></h1>
+
+There is a problem sending your email to <s:property value="to"/>.
+
 </body>
 </html>
