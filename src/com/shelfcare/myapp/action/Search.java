@@ -7,6 +7,8 @@ package com.shelfcare.myapp.action;
 
 import java.util.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
 
@@ -22,7 +24,6 @@ import java.net.Proxy;
 import java.net.URL;
 
 import com.shelfcare.myapp.form.ItemForm;
-
 import com.shelfcare.myapp.model.SearchBean;
 import com.opensymphony.xwork2.util.ValueStack;
 import com.opensymphony.xwork2.Action;
@@ -32,6 +33,7 @@ import com.opensymphony.xwork2.ModelDriven;
 
 public class Search implements Action, ModelDriven<ItemForm>  {
   
+  private String Asin;
   private SearchBean searchBean;
   private static final Logger logger = Logger.getLogger(Search.class);
   
@@ -44,7 +46,7 @@ public class Search implements Action, ModelDriven<ItemForm>  {
   }
 	
   public String getAmazonInfo() {
-	String[][] Iteminfo = new String[10][3];
+	
 	ValueStack stack = ActionContext.getContext().getValueStack();
 	Map<String, Object> context = new HashMap<String, Object>();
 	ItemForm item = new ItemForm();
@@ -62,7 +64,7 @@ public class Search implements Action, ModelDriven<ItemForm>  {
 	  Document doc = dBuilder.parse(connection.getInputStream());
 	  doc.getDocumentElement().normalize();
 	  NodeList nList = doc.getElementsByTagName("Item");
-
+	  String[][] Iteminfo = new String[ nList.getLength() ][3];
       for (int temp = 0; temp < nList.getLength(); temp++) {
 	    Node nNode = nList.item(temp);
 	    if (nNode.getNodeType() == Node.ELEMENT_NODE) {
@@ -83,7 +85,7 @@ public class Search implements Action, ModelDriven<ItemForm>  {
 	} catch (Exception e) {
         e.printStackTrace();
     }		
-	return SUCCESS;
+	return "searchResult";
   }
 	
   public List  getEbayInfo() {
@@ -117,11 +119,77 @@ public class Search implements Action, ModelDriven<ItemForm>  {
 	      list.add(arr);
 	    }   
 	  }
-      logger.info("The content were fetched are: " + list);
+      logger.info("Thecontent were fetched are: " + list);
 	} catch (Exception e) {
         e.printStackTrace();
     }
     return list;
+  }
+  
+  public String lookUp() {
+	
+    ValueStack stack = ActionContext.getContext().getValueStack();
+    Map<String, Object> context = new HashMap<String, Object>();
+    List list = new ArrayList();
+	
+	try {
+	  logger.info("lookUp called asin = " + getAsin());
+	  Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("192.168.5.100", 80));
+	  HttpURLConnection connection =(HttpURLConnection)new URL( 
+	  com.amazon.advertising.api.sample.ItemLookup.look(getAsin())).openConnection(proxy);
+	  logger.info("url in lookup : " + com.amazon.advertising.api.sample.ItemLookup.look(getAsin()));
+	  connection.setDoOutput(true);
+	  connection.setDoInput(true);
+	  connection.setRequestProperty("Content-type", "text/xml");
+	  connection.setRequestProperty("Accept", "text/xml, application/xml");
+	  connection.setRequestMethod("GET");
+	  DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+	  DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+	  Document doc = dBuilder.parse(connection.getInputStream());
+	  doc.getDocumentElement().normalize();
+	  NodeList nList = doc.getElementsByTagName("Item");
+	  logger.info("nList length: " + nList.getLength());
+	  
+	  logger.info("nList o th item" + nList.item(0).getFirstChild().getTextContent());
+	  for (int temp = 0; temp < nList.getLength(); temp++) {
+	    
+		Node nNode = nList.item(temp);
+		
+	    if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+	    Object[] arr = new Object[5];
+		Element eElement = (Element) nNode;
+		arr[0] = eElement.getElementsByTagName("DetailPageURL").item(0).getTextContent();
+		arr[1] = eElement.getElementsByTagName("MediumImage").item(0).getFirstChild().getTextContent();
+		
+		if (eElement.getElementsByTagName("OfferSummary").getLength() != 0) {
+		  arr[2] = Double.parseDouble(eElement.getElementsByTagName("OfferSummary").item(0).getFirstChild().getTextContent().split(" ")[1].replace(",",""));
+		  arr[4] = Double.parseDouble(eElement.getElementsByTagName("TotalUsed").item(0).getTextContent());
+		}
+		else {
+		  arr[2] = 0;
+		  arr[4] = 0;
+		}
+		
+		if (eElement.getElementsByTagName("ListPrice").getLength() != 0)
+		  arr[3] = Double.parseDouble(eElement.getElementsByTagName("ListPrice").item(0).getTextContent().split(" ")[1].replace(",",""));
+		else
+		  arr[3] = 0;
+		
+		logger.info(arr[2]);
+		list.add(arr);
+		}   
+      }
+	  
+      context.put("lookup", list);
+      context.put("asin", getAsin());
+	  stack.push(context);	  
+	  logger.info("look up list price change The content were fetched are: " + list);
+    } 
+	catch (Exception e) {
+	        e.printStackTrace();
+	}
+	return SUCCESS;	
+	
   }
 	
   @Override
@@ -134,6 +202,14 @@ public class Search implements Action, ModelDriven<ItemForm>  {
   public String execute() throws Exception {
     // TODO Auto-generated method stub
 	return null;
+  }
+  
+  public String getAsin() {
+		return Asin;
+  }
+	
+  public void setAsin(String asin) {
+    this.Asin = asin;
   }
 	
 } //End of Search class.

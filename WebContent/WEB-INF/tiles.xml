@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE tiles-definitions PUBLIC
+   "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+   "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+
+<tiles-definitions>
+
+   <definition name="baseLayout" template="/jsp/baseLayout.jsp">
+      <put-attribute name="title"  value="Template"/>
+      <put-attribute name="header" value="/jsp/header_search.jsp" />
+      <put-attribute name="body"   value="/jsp/home.jsp"/>
+   </definition>
+
+   <definition name="searchResult" extends="baseLayout">
+      <put-attribute name="title"  value="Result"/>
+      <put-attribute name="body"   value="/jsp/search_result.jsp"/>     
+   </definition>
+   
+   <definition name="loginForm" extends="baseLayout">
+       <put-attribute name="title" value="Login"/>
+       <put-attribute name="body" value="/jsp/login.jsp"/>
+   </definition>
+  
+   <definition name="Home" extends="baseLayout">
+       <put-attribute name="title" value="Wellcome Home" />
+       <put-attribute name="body" value="/jsp/home.jsp" />
+   </definition>
+   
+   <definition name="lookUp" extends="baseLayout">
+       <put-attribute name="title" value="Lookup" />
+       <put-attribute name="body" value="/jsp/trackForm.jsp" />
+   </definition>
+</tiles-definitions>

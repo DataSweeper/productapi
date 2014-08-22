@@ -1,5 +1,5 @@
 
-   	<form action="search" id="search_form">
+   	<form action="search" id="search_form" method="post">
 	<table>
 	<tr>
 	<td>
@@ -38,13 +38,4 @@
 	<td><input type="submit" value="search"></td>
 	</tr>
 	</table>
-	</form>
-	
-	<form action = "Search" id = "ebay">
-	  <table>
-	    <tr>
-		  <td><input type="text" name="searchBean.text"></td>
-	      <td><input type="submit" value="search"></td>
-	    </tr>
-	  </table>
 	</form>

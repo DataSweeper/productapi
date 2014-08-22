@@ -9,7 +9,6 @@ public class SearchBean {
 	private String pageno;
 	private String type;
 	private String text;
-
 	
 	public String getPageno() {
 		return pageno;

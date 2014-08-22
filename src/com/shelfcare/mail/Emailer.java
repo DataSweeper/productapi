@@ -1,6 +1,9 @@
 package com.shelfcare.mail;
 
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.util.Properties;
+
 import javax.mail.Message;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
@@ -8,17 +11,25 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.apache.log4j.Logger;
+
 import com.opensymphony.xwork2.ActionSupport;
+import com.shelfcare.myapp.action.Search;
 
 public class Emailer extends ActionSupport {
 
+   private static final Logger logger = Logger.getLogger(Emailer.class);
+   
    private String from;
    private String password;
    private String to;
    private String subject;
    private String body;
-
+   
    static Properties properties = new Properties();
+
+   Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("192.168.5.100", 80));
+   
    static
    {
       properties.put("mail.smtp.host", "smtp.gmail.com");
@@ -27,28 +38,36 @@ public class Emailer extends ActionSupport {
                      "javax.net.ssl.SSLSocketFactory");
       properties.put("mail.smtp.auth", "true");
       properties.put("mail.smtp.port", "465");
+      
    }
-
+   
+   
    public String execute() 
    {
       String ret = SUCCESS;
       try
       {
-         Session session = Session.getDefaultInstance(properties,  
+    	    logger.info("inside try");
+            Session session = Session.getDefaultInstance(properties,  
             new javax.mail.Authenticator() {
             protected PasswordAuthentication 
             getPasswordAuthentication() {
             return new 
-            PasswordAuthentication(from, password);
+            PasswordAuthentication(from , password);
             }});
-
+         logger.info("message : " + from + " " + password);
+         logger.info("session : " + session);
+         
          Message message = new MimeMessage(session);
+         
          message.setFrom(new InternetAddress(from));
-         message.setRecipients(Message.RecipientType.TO, 
-            InternetAddress.parse(to));
+         message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
          message.setSubject(subject);
          message.setText(body);
+         
+         logger.info("subject :"+ subject + "body " + body);
          Transport.send(message);
+         logger.info("Mail has beeb send");
       }
       catch(Exception e)
       {

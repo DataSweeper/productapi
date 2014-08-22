@@ -1,0 +1,36 @@
+table, th, td {
+   border: 1px solid black;
+}
+
+body {
+    font-size: 100%;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table, th, td {
+    border: 1px solid black;
+}
+
+th {
+    height: 50px;
+}
+
+td {
+    text-align: right;
+    height: 50px;
+    vertical-align: bottom;
+    padding: 15px;
+}
+
+table, td, th {
+    border: 1px solid green;
+}
+
+th {
+    background-color: green;
+    color: white;
+}

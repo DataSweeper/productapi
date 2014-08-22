@@ -8,7 +8,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script src="/shelfcare/js/jquery-1.11.1.js"></script>
 <title>Insert title here</title>
-<script>
+<script>/*
 $(document).ready(function(){
 	$("#search_form").submit(function(){
 		alert("work1");
@@ -19,17 +19,14 @@ $(document).ready(function(){
 		}
 		return false;
 	});
-});
+});*/
 </script>
 </head>
 <body>
-<%@ include file="/jsp/header_search.jsp" %>
-<s:property value="loginBean.email" />
-<s:property value="loginBean.password" />
-<p> ${sessionScope.email} </p>
 
-<a href="logout">Logout</a>
-<div id="ajaxcontent">
+  <p> ${sessionScope.email} </p>
+
+  <a href="logout">Logout</a>
 
 </div>
 </body>
